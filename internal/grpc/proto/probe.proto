@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package probe;
+
+option go_package = "github.com/kullaniciadin/goprobe/internal/grpc/proto";
+
+// Servis Tanımı: Master'ın Worker'ı çağırma yöntemleri
+service ProbeService {
+  // Master, Worker'a "Kontrol Et" (Check) der, Worker sonucunu döner.
+  rpc CheckUrl (CheckRequest) returns (CheckResponse);
+}
+
+// Master'ın göndereceği veri
+message CheckRequest {
+  string url = 1; // Örn: "https://google.com"
+}
+
+// Worker'ın döneceği cevap
+message CheckResponse {
+  string url = 1;
+  int32 status_code = 2; // Örn: 200, 404, 500
+  double response_time_ms = 3; // Örn: 120.5 ms
+  bool status = 4; // Site ayakta mı? (True/False)
+  string error_message = 5; // Hata varsa buraya yazılacak
+}
