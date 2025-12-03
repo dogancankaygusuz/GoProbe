@@ -1,0 +1,9 @@
+@echo off
+echo [GOPROBE] Baslatiliyor...
+echo 1. Worker ayaga kalkiyor...
+start "GoProbe Worker" go run cmd/worker/main.go
+
+timeout /t 2 /nobreak >nul
+
+echo 2. Master ayaga kalkiyor...
+go run cmd/master/main.go

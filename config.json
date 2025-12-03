@@ -1,0 +1,18 @@
+{
+  "timeout": 10,
+  "targets": [
+    "https://www.dogancankaygusuz.com",
+    "https://github.com/dogancankaygusuz",
+    "https://www.linkedin.com/in/dogancan-kaygusuz",
+    "https://www.google.com",
+    "https://www.github.com",
+    "https://go.dev",
+    "https://stackoverflow.com",
+    "https://cloudflare.com",
+    "https://api.boredapi.com/api/activity",
+    "https://tr.linkedin.com",
+    "https://www.btkakademi.gov.tr",
+    "http://httpstat.us/404",
+    "http://httpstat.us/200"
+  ]
+}
