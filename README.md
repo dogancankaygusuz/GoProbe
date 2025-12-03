@@ -31,7 +31,9 @@ go mod tidy
 
 ### 3. Çalıştırma (Windows)
 Projeyi kolayca başlatmak için run.bat dosyasını kullanabilirsiniz:
+
 .\run.bat
+
 Bu komut Worker ve Master servislerini ayrı terminallerde otomatik olarak başlatır.
 
 ### Alternatif olarak manuel çalıştırma:
