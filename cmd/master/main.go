@@ -7,11 +7,18 @@ import (
 	"time"
 
 	pb "github.com/dogancankaygusuz/goprobe/internal/grpc/proto"
+	"github.com/dogancankaygusuz/goprobe/pkg/database" 
+	
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
 
 func main() {
+	// 1. Veritabanını Başlat
+	db := database.InitDB()
+	log.Println("Veritabanı bağlantısı başarılı (SQLite).")
+
+	// 2. Worker'a Bağlan
 	conn, err := grpc.Dial("localhost:50051", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("Worker'a bağlanılamadı: %v", err)
@@ -23,50 +30,52 @@ func main() {
 	urls := []string{
 		"https://www.google.com",
 		"https://www.github.com",
-		"https://www.stackoverflow.com",
 		"https://go.dev",
-		"https://api.boredapi.com/api/activity", // Yavaş/Kapalı site
+		"https://api.boredapi.com/api/activity",
 	}
 
 	for {
-		log.Println("----- Taramayı Başlat (Concurrent) -----")
-		startTotal := time.Now()
-
-		// WaitGroup: Tüm goroutine'lerin bitmesini beklemek için sayaç
+		log.Println("----- Taramayı Başlat -----")
 		var wg sync.WaitGroup
 
 		for _, url := range urls {
-			wg.Add(1) // Sayacı 1 artır
+			wg.Add(1)
 
-			// Her URL için ayrı bir Goroutine (iş parçacığı) başlatıyoruz
 			go func(targetUrl string) {
-				defer wg.Done() // İş bitince sayacı 1 azalt
+				defer wg.Done()
 
 				ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
 				defer cancel()
 
 				resp, err := client.CheckUrl(ctx, &pb.CheckRequest{Url: targetUrl})
+				
+				// Veritabanı için kayıt nesnesi oluşturuyoruz
+				resultToSave := database.CheckResult{
+					Url: targetUrl,
+				}
 
 				if err != nil {
-					// Hata durumunda sadece log basıyoruz (ileride DB'ye yazacağız)
 					log.Printf("❌ HATA [%s]: %v", targetUrl, err)
+					resultToSave.Status = false
+					resultToSave.ErrorMessage = err.Error()
 				} else {
-					statusIcon := "✅"
-					if !resp.Status {
-						statusIcon = "🔻"
-					}
-					log.Printf("%s Site: %s | Kod: %d | Süre: %.0fms",
-						statusIcon, resp.Url, resp.StatusCode, resp.ResponseTimeMs)
+					log.Printf("✅ Site: %s | Kod: %d | Süre: %.0fms", 
+						resp.Url, resp.StatusCode, resp.ResponseTimeMs)
+					
+					resultToSave.Url = resp.Url
+					resultToSave.StatusCode = resp.StatusCode
+					resultToSave.ResponseTimeMs = resp.ResponseTimeMs
+					resultToSave.Status = resp.Status
 				}
+
+				// 3. SONUCU VERİTABANINA KAYDET (GORM ile tek satır)
+				db.Create(&resultToSave)
+
 			}(url)
 		}
 
-		// Tüm goroutine'ler bitene kadar burada bekle
 		wg.Wait()
-
-		totalDuration := time.Since(startTotal)
-		log.Printf("----- Tarama Bitti (Toplam Süre: %v) -----\n", totalDuration)
-
+		log.Println("----- Tarama Bitti ve Kaydedildi -----")
 		time.Sleep(5 * time.Second)
 	}
 }
