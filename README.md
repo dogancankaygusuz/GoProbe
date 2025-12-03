@@ -23,6 +23,7 @@ Sistem iki ana bileşenden oluşur:
 
 ### 1. Projeyi Klonlayın
 git clone https://github.com/dogancankaygusuz/goprobe.git
+
 cd goprobe
 
 ### 2. Bağımlılıkları Yükleyin
