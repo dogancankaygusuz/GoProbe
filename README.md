@@ -58,5 +58,5 @@ JSON
   ]
 }
 
-🗄 Veritabanı
+## 🗄 Veritabanı
 Proje varsayılan olarak kurulum gerektirmeyen SQLite kullanır. Veriler proje dizinindeki goprobe.db dosyasına kaydedilir. Bu dosyayı herhangi bir "SQLite Viewer" ile görüntüleyebilirsiniz.
