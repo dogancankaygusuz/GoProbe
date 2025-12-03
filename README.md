@@ -36,12 +36,12 @@ Projeyi kolayca başlatmak için run.bat dosyasını kullanabilirsiniz:
 
 Bu komut Worker ve Master servislerini ayrı terminallerde otomatik olarak başlatır.
 
-### Alternatif olarak manuel çalıştırma:
+## Alternatif olarak manuel çalıştırma:
 
-# Terminal 1 (Worker)
+### Terminal 1 (Worker)
 go run cmd/worker/main.go
 
-# Terminal 2 (Master)
+### Terminal 2 (Master)
 go run cmd/master/main.go
 
 🛠 Konfigürasyon (config.json)
