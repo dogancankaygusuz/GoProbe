@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"time"
 
-	// BURAYI KENDİ MODÜL ADINLA GÜNCELLE
 	pb "github.com/dogancankaygusuz/goprobe/internal/grpc/proto"
 	"google.golang.org/grpc"
 )
@@ -21,15 +20,14 @@ func (s *server) CheckUrl(ctx context.Context, req *pb.CheckRequest) (*pb.CheckR
 
 	start := time.Now()
 
-	// HTTP Client (10 saniye zaman aşımı)
 	client := http.Client{
 		Timeout: 10 * time.Second,
 	}
 
 	resp, err := client.Get(req.GetUrl())
-	elapsed := time.Since(start).Seconds() * 1000 // ms cinsinden
+	elapsed := time.Since(start).Seconds() * 1000 // ms
 
-	// Hata durumu (DNS hatası, site kapalı vs.)
+	// Hata durumu
 	if err != nil {
 		return &pb.CheckResponse{
 			Url:            req.GetUrl(),

@@ -2,7 +2,9 @@ package main
 
 import (
 	"context"
+	"html/template"
 	"log"
+	"net/http"
 	"sync"
 	"time"
 
@@ -14,17 +16,45 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
+var (
+	latestResults = make(map[string]database.CheckResult)
+	mu            sync.Mutex
+)
+
+// Web Sunucusu Handler'ı
+func dashboardHandler(w http.ResponseWriter, r *http.Request) {
+	mu.Lock()
+	var results []database.CheckResult
+	for _, result := range latestResults {
+		results = append(results, result)
+	}
+	mu.Unlock()
+
+	// HTML şablonunu yükle ve verileri gönder
+	tmpl, err := template.ParseFiles("templates/dashboard.html")
+	if err != nil {
+		http.Error(w, "HTML dosyası yüklenemedi: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+	tmpl.Execute(w, results)
+}
+
 func main() {
-	// Konfigürasyonu Yükle
 	cfg, err := config.LoadConfig("config.json")
 	if err != nil {
-		log.Fatalf("Ayar dosyası (config.json) okunamadı: %v", err)
+		log.Fatalf("Config hatası: %v", err)
 	}
-	log.Printf("Konfigürasyon yüklendi. İzlenecek site sayısı: %d", len(cfg.Targets))
 
-	// Veritabanını Başlat (SQLite)
 	db := database.InitDB()
-	log.Println("Veritabanı bağlantısı başarılı (SQLite).")
+
+	// WEB SERVER BAŞLAT
+	go func() {
+		http.HandleFunc("/", dashboardHandler)
+		log.Println("🌍 Dashboard Yayında: http://localhost:8080")
+		if err := http.ListenAndServe(":8080", nil); err != nil {
+			log.Fatalf("Web sunucusu hatası: %v", err)
+		}
+	}()
 
 	// Worker'a Bağlan
 	conn, err := grpc.Dial("localhost:50051", grpc.WithTransportCredentials(insecure.NewCredentials()))
@@ -32,64 +62,45 @@ func main() {
 		log.Fatalf("Worker'a bağlanılamadı: %v", err)
 	}
 	defer conn.Close()
-
 	client := pb.NewProbeServiceClient(conn)
 
-	// Sonsuz Döngüde Tarama
+	// Ana Tarama Döngüsü
 	for {
-		log.Println("----- Taramayı Başlat -----")
-		startTotal := time.Now()
+		log.Println("----- Tarama Başlıyor -----")
 		var wg sync.WaitGroup
 
-		// Config'den gelen URL listesini dönüyoruz
 		for _, url := range cfg.Targets {
 			wg.Add(1)
 
-			// Her site için bir Goroutine
 			go func(targetUrl string) {
 				defer wg.Done()
 
-				// Config'den gelen timeout süresini kullanıyoruz
-				timeoutDuration := time.Duration(cfg.Timeout) * time.Second
-				ctx, cancel := context.WithTimeout(context.Background(), timeoutDuration)
+				timeout := time.Duration(cfg.Timeout) * time.Second
+				ctx, cancel := context.WithTimeout(context.Background(), timeout)
 				defer cancel()
 
-				// gRPC ile Worker'a sor
 				resp, err := client.CheckUrl(ctx, &pb.CheckRequest{Url: targetUrl})
-
-				// Veritabanı kayıt nesnesi
-				resultToSave := database.CheckResult{
-					Url: targetUrl,
-				}
+				result := database.CheckResult{Url: targetUrl}
 
 				if err != nil {
-					// Hata durumu
-					log.Printf("❌ HATA [%s]: %v", targetUrl, err)
-					resultToSave.Status = false
-					resultToSave.ErrorMessage = err.Error()
+					log.Printf("❌ %s Hata: %v", targetUrl, err)
+					result.Status = false
+					result.ErrorMessage = err.Error()
 				} else {
-					// Başarılı durum
-					statusIcon := "✅"
-					if !resp.Status {
-						statusIcon = "🔻"
-					}
-					log.Printf("%s Site: %s | Kod: %d | Süre: %.0fms",
-						statusIcon, resp.Url, resp.StatusCode, resp.ResponseTimeMs)
-
-					resultToSave.Url = resp.Url
-					resultToSave.StatusCode = resp.StatusCode
-					resultToSave.ResponseTimeMs = resp.ResponseTimeMs
-					resultToSave.Status = resp.Status
+					result.Url = resp.Url
+					result.StatusCode = resp.StatusCode
+					result.ResponseTimeMs = resp.ResponseTimeMs
+					result.Status = resp.Status
+					log.Printf("✅ %s | %d | %.0fms", resp.Url, resp.StatusCode, resp.ResponseTimeMs)
 				}
-
-				// Sonucu Veritabanına Kaydet
-				db.Create(&resultToSave)
+				db.Create(&result)
+				mu.Lock()
+				latestResults[targetUrl] = result
+				mu.Unlock()
 
 			}(url)
 		}
 		wg.Wait()
-		totalDuration := time.Since(startTotal)
-		log.Printf("----- Tarama Bitti (Toplam Süre: %v) -----", totalDuration)
 		time.Sleep(5 * time.Second)
 	}
 }
