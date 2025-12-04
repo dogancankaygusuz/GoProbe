@@ -1,9 +1,11 @@
 # 🚀 GoProbe - Dağıtık Web İzleme Sistemi (Distributed Uptime Monitor)
 
-GoProbe, **Go (Golang)** dili ile geliştirilmiş, yüksek performanslı ve dağıtık mimariye sahip bir sistem izleme aracıdır. Mikroservisler arası iletişimde **gRPC**, veri tutarlılığı için **SQLite/PostgreSQL** ve eşzamanlı işlemler için **Go Concurrency** modellerini kullanır.
+GoProbe, **Go (Golang)** dili ile geliştirilmiş, yüksek performanslı, modern ve dağıtık mimariye sahip bir sistem izleme aracıdır. Mikroservisler arası iletişimde **gRPC**, veri tutarlılığı için **SQLite/PostgreSQL** kullanır. Ayrıca sonuçları anlık olarak takip edebileceğiniz bir **Web Dashboard (Kontrol Paneli)** sunar.
 
 ![Go](https://img.shields.io/badge/Go-1.21+-00ADD8?style=flat&logo=go)
 ![gRPC](https://img.shields.io/badge/gRPC-Protobuf-244c5a?style=flat&logo=google)
+![Dashboard](https://img.shields.io/badge/Web-Dashboard-orange?style=flat&logo=html5)
+![License](https://img.shields.io/badge/License-MIT-green)
 ![Database](https://img.shields.io/badge/SQLite-PostgreSQL-blue?style=flat&logo=postgresql)
 
 ## 🏗 Proje Mimarisi
