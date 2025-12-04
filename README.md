@@ -56,7 +56,7 @@ go run cmd/master/main.go
 Tarayıcınızı açın ve şu adrese gidin:
 👉 http://localhost:8080
 
-🛠 Konfigürasyon (config.json)
+## 🛠 Konfigürasyon (config.json)
 İzlemek istediğiniz web sitelerini config.json dosyasını düzenleyerek ekleyebilirsiniz:
 
 JSON
