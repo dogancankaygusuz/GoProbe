@@ -17,7 +17,9 @@ Sistem üç ana bileşenden oluşur:
 ## 🖥️ Arayüz (Dashboard)
 Sistemi çalıştırdığınızda `http://localhost:8080` adresinden canlı durumu izleyebilirsiniz.
 
-`![Dashboard Preview](goprobe_img.png)`
+<p align="center">
+  <img src="goprobe_img.png" alt="GoProbe Dashboard" width="800">
+</p>
 
 ## ✨ Temel Özellikler
 - **Mikroservis Mimarisi:** Servisler arası iletişim hızlı ve güvenli olan gRPC (Protobuf) ile sağlanır.
