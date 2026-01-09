@@ -71,7 +71,7 @@ go run cmd/master/main.go
 Tarayıcınızı açın ve şu adrese gidin:
 👉 http://localhost:8080
 
-## 🛠 Konfigürasyon (config.json)
+## Konfigürasyon (config.json)
 İzlemek istediğiniz web sitelerini config.json dosyasını düzenleyerek ekleyebilirsiniz:
 
 JSON
@@ -85,5 +85,5 @@ JSON
   ]
 }
 
-## 🗄 Veritabanı
+## Veritabanı
 Proje varsayılan olarak kurulum gerektirmeyen SQLite kullanır. Veriler proje dizinindeki goprobe.db dosyasına kaydedilir. Bu dosyayı herhangi bir "SQLite Viewer" ile görüntüleyebilirsiniz.
