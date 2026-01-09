@@ -41,7 +41,10 @@ cd goprobe
 ```
 
 ### 2. Bağımlılıkları Yükleyin
+
+```bash
 go mod tidy
+```
 
 ### 3. Çalıştırma (Windows)
 Projeyi kolayca başlatmak için run.bat dosyasını kullanabilirsiniz:
