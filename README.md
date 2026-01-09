@@ -35,7 +35,10 @@ Sistemi çalıştırdığınızda `http://localhost:8080` adresinden canlı duru
 ```bash
 git clone https://github.com/dogancankaygusuz/goprobe.git
 ```
+
+```bash
 cd goprobe
+```
 
 ### 2. Bağımlılıkları Yükleyin
 go mod tidy
@@ -43,7 +46,9 @@ go mod tidy
 ### 3. Çalıştırma (Windows)
 Projeyi kolayca başlatmak için run.bat dosyasını kullanabilirsiniz:
 
+```bash
 .\run.bat
+```
 
 Bu komut Worker ve Master servislerini ayrı terminallerde otomatik olarak başlatır.
 
