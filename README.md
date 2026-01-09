@@ -57,9 +57,15 @@ Bu komut Worker ve Master servislerini ayrı terminallerde otomatik olarak başl
 
 ## Alternatif olarak manuel çalıştırma:
 
-#### Terminal 1 (Worker): go run cmd/worker/main.go
+#### Terminal 1 (Worker): 
+```bash
+go run cmd/worker/main.go
+```
 
-#### Terminal 2 (Master): go run cmd/master/main.go
+#### Terminal 2 (Master): 
+```bash
+go run cmd/master/main.go
+```
 
 ### 4. Paneli İzleyin
 Tarayıcınızı açın ve şu adrese gidin:
