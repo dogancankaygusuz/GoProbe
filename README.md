@@ -7,7 +7,7 @@ GoProbe, **Go (Golang)** dili ile geliştirilmiş, yüksek performanslı, modern
 ![Dashboard](https://img.shields.io/badge/Web-Dashboard-orange?style=flat&logo=html5)
 ![Database](https://img.shields.io/badge/SQLite-PostgreSQL-blue?style=flat&logo=postgresql)
 
-## 🏗 Proje Mimarisi
+## Proje Mimarisi
 
 Sistem üç ana bileşenden oluşur:
 1.  **Master Node (Yönetici):** `config.json` dosyasından hedefleri okur, tarama işlemlerini yönetir ve sonuçları veritabanına kaydeder.
@@ -21,7 +21,7 @@ Sistemi çalıştırdığınızda `http://localhost:8080` adresinden canlı duru
   <img src="goprobe_img.png" alt="GoProbe Dashboard" width="800">
 </p>
 
-## ✨ Temel Özellikler
+## Temel Özellikler
 - **Mikroservis Mimarisi:** Servisler arası iletişim hızlı ve güvenli olan gRPC (Protobuf) ile sağlanır.
 - **Canlı Web Paneli:** HTML/CSS tabanlı, otomatik yenilenen karanlık mod (Dark Mode) arayüz.
 - **Eşzamanlılık:** Binlerce siteyi aynı anda tarayabilmek için Goroutines ve WaitGroup yapısı kullanılır.
