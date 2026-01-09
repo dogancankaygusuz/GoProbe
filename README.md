@@ -1,4 +1,4 @@
-# 🚀 GoProbe - Dağıtık Web İzleme Sistemi (Distributed Uptime Monitor)
+# GoProbe - Dağıtık Web İzleme Sistemi (Distributed Uptime Monitor)
 
 GoProbe, **Go (Golang)** dili ile geliştirilmiş, yüksek performanslı, modern ve dağıtık mimariye sahip bir sistem izleme aracıdır. Mikroservisler arası iletişimde **gRPC**, veri tutarlılığı için **SQLite/PostgreSQL** kullanır. Ayrıca sonuçları anlık olarak takip edebileceğiniz bir **Web Dashboard (Kontrol Paneli)** sunar.
 
@@ -14,7 +14,7 @@ Sistem üç ana bileşenden oluşur:
 2.  **Worker Node (İşçi):** Master'dan gelen gRPC isteklerini karşılar, hedef sitelere HTTP istekleri atar ve analiz sonuçlarını (Süre, Durum Kodu vb.) raporlar.
 3.  **Database & Cache:** Veriler kalıcı olarak SQLite'a yazılırken, anlık durumlar RAM üzerinde (In-Memory) tutularak Dashboard'a yansıtılır.
    
-## 🖥️ Arayüz (Dashboard)
+## 🖥️ Arayüz
 Sistemi çalıştırdığınızda `http://localhost:8080` adresinden canlı durumu izleyebilirsiniz.
 
 <p align="center">
@@ -24,7 +24,7 @@ Sistemi çalıştırdığınızda `http://localhost:8080` adresinden canlı duru
 ## ✨ Temel Özellikler
 - **Mikroservis Mimarisi:** Servisler arası iletişim hızlı ve güvenli olan gRPC (Protobuf) ile sağlanır.
 - **Canlı Web Paneli:** HTML/CSS tabanlı, otomatik yenilenen karanlık mod (Dark Mode) arayüz.
-- **Eşzamanlılık (Concurrency):** Binlerce siteyi aynı anda tarayabilmek için Goroutines ve WaitGroup yapısı kullanılır.
+- **Eşzamanlılık:** Binlerce siteyi aynı anda tarayabilmek için Goroutines ve WaitGroup yapısı kullanılır.
 - **Veri Kalıcılığı:** Sonuçlar otomatik olarak SQLite veritabanına kaydedilir.
 - **Kolay Konfigürasyon:** İzlenecek siteler JSON dosyası üzerinden yönetilebilir.
 - **Docker Desteği:** İstenirse veritabanı Docker üzerinde PostgreSQL olarak çalıştırılabilir.
@@ -32,8 +32,9 @@ Sistemi çalıştırdığınızda `http://localhost:8080` adresinden canlı duru
 ## 🚀 Kurulum ve Çalıştırma
 
 ### 1. Projeyi Klonlayın
+```bash
 git clone https://github.com/dogancankaygusuz/goprobe.git
-
+```
 cd goprobe
 
 ### 2. Bağımlılıkları Yükleyin
